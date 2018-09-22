@@ -18,6 +18,8 @@ export class ServiceProvider {
 
     getRecentPosts() {
 
-        return this.http.get(Config.WORDPRESS_REST_API_URL);
+        if(this.http.get(Config.WORDPRESS_REST_API_URL)){
+            return this.http.get(Config.WORDPRESS_REST_API_URL);
+        }
     }
 }
