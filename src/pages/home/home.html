@@ -1,14 +1,26 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      {{story_title}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<!--<p [innerHTML]="story_content"></p>-->
+
+  <ion-card *ngFor="let evt of story">
+    <ion-card-content >
+      <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
+      <p [innerHTML]="evt.excerpt.rendered"></p>
+    </ion-card-content>
+    <ion-row no-padding>
+      <ion-col text-right>
+        <button ion-button small color="primary" (click)="postTapped(evt)" icon-start>
+          Read More
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
 </ion-content>
