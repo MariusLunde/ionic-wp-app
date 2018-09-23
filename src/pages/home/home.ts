@@ -11,22 +11,24 @@ export class HomePage {
     public story: Array<any> = new Array<any>();
     morePagesAvailable: boolean = true;
 
-
+    private storiesToLoad: number = 10;
     private i : number;
 
 
 
   constructor(public navCtrl: NavController, public service: ServiceProvider) {
-          this.service.getRecentPosts().subscribe(data => {
-              for(this.i = 0; this.i >= 0; this.i++){
-                  if(!(data[this.i] == undefined)) {
-                      this.story[this.i] = data[this.i];
-                  }
-              }
-
-          });
-
           !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
+  }
+
+  ionViewDidLoad() {
+      this.service.getRecentPosts().subscribe(data => {
+          for(this.i = 0; this.i < this.storiesToLoad;this.i++){
+              if(!(data[this.i] == undefined)) {
+                  this.story[this.i] = data[this.i];
+              }
+          }
+
+      });
   }
 
     postTapped(story : any) {
@@ -41,7 +43,7 @@ export class HomePage {
         this.service.getRecentPosts()
             .subscribe(data => {
                 if(data) {
-                    for(this.i = 0; this.i >= 0; this.i++){
+                    for(this.i = 0; this.i < this.storiesToLoad; this.i++){
                         infiniteScroll.complete();
                         this.story[this.i] = data[this.i];
                     }
@@ -51,6 +53,19 @@ export class HomePage {
                 if(err){
                     return;
                 }
+        });
+    }
+
+    doRefresh(refresher){
+      console.log('heu');
+
+        this.service.getRecentPosts().subscribe(data => {
+            for(this.i = 0; this.i < this.storiesToLoad;this.i++){
+                if(!(data[this.i] == undefined)) {
+                    this.story[this.i] = data[this.i];
+                }
+                return refresher.complete();
+            }
         });
     }
 
