@@ -15,20 +15,34 @@ export class HomePage {
     private i : number;
 
 
+    categoryId: number;
+
 
   constructor(public navCtrl: NavController, public service: ServiceProvider) {
           !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
+
   }
 
   ionViewDidLoad() {
-      this.service.getRecentPosts().subscribe(data => {
-          for(this.i = 0; this.i < this.storiesToLoad;this.i++){
+      this.service.getRecentPosts(this.categoryId).subscribe(data => {
+          for(this.i = 0; this.i <= this.storiesToLoad;this.i++){
               if(!(data[this.i] == undefined)) {
                   this.story[this.i] = data[this.i];
+
               }
           }
 
       });
+      this.service.getCategories().subscribe(data => {
+
+          Object.keys(data).forEach(function(key) {
+              console.log(data[key]);
+              const category : any = data[key].name;
+              console.log(category);
+          });
+
+      });
+
   }
 
     postTapped(story : any) {
@@ -40,12 +54,13 @@ export class HomePage {
 
     doInfinite(infiniteScroll) {
 
-        this.service.getRecentPosts()
+        this.service.getRecentPosts(this.categoryId)
             .subscribe(data => {
                 if(data) {
-                    for(this.i = 0; this.i < this.storiesToLoad; this.i++){
+                    for(this.i = 0; this.i <= this.storiesToLoad; this.i++){
                         infiniteScroll.complete();
                         this.story[this.i] = data[this.i];
+
                     }
                 }
 
@@ -57,16 +72,14 @@ export class HomePage {
     }
 
     doRefresh(refresher){
-      console.log('heu');
-
-        this.service.getRecentPosts().subscribe(data => {
-            for(this.i = 0; this.i < this.storiesToLoad;this.i++){
+        this.service.getRecentPosts(this.categoryId).subscribe(data => {
+            for(this.i = 0; this.i <= this.storiesToLoad;this.i++){
                 if(!(data[this.i] == undefined)) {
                     this.story[this.i] = data[this.i];
                 }
-                return refresher.complete();
             }
         });
+        return refresher.complete();
     }
 
 }

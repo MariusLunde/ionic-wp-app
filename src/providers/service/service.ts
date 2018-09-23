@@ -16,10 +16,14 @@ export class ServiceProvider {
 
   }
 
-    getRecentPosts() {
+    getRecentPosts(categoryId: number, page: number = 1) {
+        let category_url = categoryId? ("&categories=" + categoryId): "";
 
-        if(this.http.get(Config.WORDPRESS_REST_API_URL)){
-            return this.http.get(Config.WORDPRESS_REST_API_URL);
-        }
+        return this.http.get(Config.WORDPRESS_REST_API_URL + 'posts?page=' + page + category_url);
     }
+
+    getCategories(){
+        return this.http.get(Config.WORDPRESS_REST_API_URL + "categories");
+    }
+
 }

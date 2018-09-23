@@ -5,11 +5,11 @@
   <ion-card *ngFor="let evt of story">
     <ion-card-content>
       <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
-      <p [innerHTML]="evt.excerpt.rendered"></p>
+      <p [innerHTML]="evt.content.rendered"></p>
     </ion-card-content>
     <ion-row no-padding>
       <ion-col text-right>
-        <button ion-button color="primary" (click)="postTapped(evt)" icon-start>
+        <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
           Read More
         </button>
       </ion-col>
