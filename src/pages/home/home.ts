@@ -12,6 +12,7 @@ export class HomePage {
     public category: any;
 
     morePagesAvailable: boolean = true;
+    showCategories: boolean;
 
     searchTerm: string;
 
@@ -69,6 +70,11 @@ export class HomePage {
       });
       this.story = new Array<any>();
       this.getPosts(this.categoryId);
+    }
+
+    toggleCategories() {
+      this.showCategories ? this.showCategories = false : this.showCategories = true;
+      console.log('hei');
     }
 
 }

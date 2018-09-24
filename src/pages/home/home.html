@@ -1,10 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>App</ion-title>
+    <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+  </ion-toolbar>
+</ion-header>
+
+
 <ion-content padding>
+  <ion-menu [enabled]="true" type="overlay" side="left" [content]="mycontent">
 
-    <ion-list class="list" no-lines>
-      <ion-item *ngFor="let s of category" [innerHTML]="s.name" block (click)="search(s.name)">
-      </ion-item>
+    <ion-title padding>Categories</ion-title>
+    <ion-list>
+      <ion-item *ngFor="let s of category" block menuClose (click)="search(s.name)">{{s.name}}</ion-item>
     </ion-list>
+  </ion-menu>
 
+  <ion-nav [root]="rootPage" no-lines #mycontent>
+  </ion-nav>
+  <!--<ion-buttons ion-button="primary" [outline] (click)="toggleCategories()">toggle</ion-buttons>-->
+  <!--<div *ngIf="showCategories == false">-->
+
+  <!--</div>-->
   <ion-refresher (ionRefresh)="doRefresh($event)">
   <ion-refresher-content pullingIcon="crescent" refreshingSpinner="dots"></ion-refresher-content>
   </ion-refresher>
@@ -27,4 +43,5 @@
             loadingText="Loading more posts ...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
 </ion-content>
