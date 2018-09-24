@@ -1,5 +1,13 @@
 page-home {
-ion-card-content{
-  max-height: 15vh;
-}
+  ion-card-content {
+    max-height: 15vh;
+  }
+  .list{
+    ion-item {
+      display: block;
+      text-align: center;
+      margin: 5px;
+    }
+  }
+
 }

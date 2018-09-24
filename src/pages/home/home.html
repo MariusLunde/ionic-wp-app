@@ -1,6 +1,12 @@
 <ion-content padding>
+
+    <ion-list class="list" no-lines>
+      <ion-item *ngFor="let s of category" [innerHTML]="s.name" block (click)="search(s.name)">
+      </ion-item>
+    </ion-list>
+
   <ion-refresher (ionRefresh)="doRefresh($event)">
-  <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  <ion-refresher-content pullingIcon="crescent" refreshingSpinner="dots"></ion-refresher-content>
   </ion-refresher>
   <ion-card *ngFor="let evt of story">
     <ion-card-content>
