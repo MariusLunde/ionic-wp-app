@@ -17,9 +17,15 @@ export class ServiceProvider {
 
   }
 
-    getRecentPosts(categoryId: string) {
+    getRecentPosts(categoryId: number) {
 
-        return this.http.get(Config.WORDPRESS_REST_API_URL + 'posts?search=' + categoryId);
+        let ifSearch;
+
+        categoryId == undefined ? categoryId = 0 : categoryId;
+
+        categoryId == 17 ? ifSearch = "posts" :  ifSearch = "posts?categories=" + categoryId;
+
+        return this.http.get(Config.WORDPRESS_REST_API_URL + ifSearch);
     }
 
     getCategories() {
@@ -31,29 +37,4 @@ export class ServiceProvider {
         return this.category;
     }
 
-    searchCategories(searchTerm) {
-        if(searchTerm == ''){
-            return [];
-        }
-        let lcSearchTerm = searchTerm.toLowerCase();
-
-        this.http.get(Config.WORDPRESS_REST_API_URL + "posts?search=" + lcSearchTerm).subscribe( data => {
-            return data;
-
-        });
-    }
-
-    // filterItems(searchTerm, max = 10){
-    //     if(searchTerm == ''){
-    //         return [];
-    //     }
-    //     let lcSearchTerm = searchTerm.toLowerCase();
-    //     return this.cars.filter((car) => {
-    //         if(car.title.toLowerCase().indexOf(lcSearchTerm) > -1 || car.brand.toLowerCase().indexOf(lcSearchTerm) > -1 ) {
-    //             return -1
-    //         }else{
-    //             return null;
-    //         }
-    //     }).slice(0, max);
-    // }
 }

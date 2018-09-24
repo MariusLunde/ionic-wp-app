@@ -13,9 +13,6 @@ export class HomePage {
 
     morePagesAvailable: boolean = true;
 
-    private storiesToLoad: number = 10;
-    private i : number;
-
     searchTerm: string;
 
     categoryId: any;
@@ -27,15 +24,12 @@ export class HomePage {
   }
 
   getPosts(s) {
-      this.service.getRecentPosts(s).subscribe(data => {
-          for(this.i = 0; this.i <= this.storiesToLoad;this.i++){
-              if(!(data[this.i] == undefined)) {
-                  this.story[this.i] = data[this.i];
-                  console.log(this.story[this.i]);
-
+      this.service.getRecentPosts(this.categoryId).subscribe(data => {
+          for(let key in data){
+              if(data[key] != this.story[key]) {
+                  this.story[key] = data[key];
               }
           }
-
       });
   }
 
@@ -51,18 +45,11 @@ export class HomePage {
         this.service.getRecentPosts(this.categoryId)
             .subscribe(data => {
                 if(data) {
-                    for(this.i = 0; this.i <= this.storiesToLoad; this.i++){
-                        infiniteScroll.complete();
-                        this.story[this.i] = data[this.i];
-
-                    }
+                    infiniteScroll.complete();
+                    this.getPosts(this.searchTerm);
                 }
 
-            }, err => {
-                if(err){
-                    return;
-                }
-        });
+            });
     }
 
     doRefresh(refresher){
@@ -75,7 +62,13 @@ export class HomePage {
 
     search(s) {
       this.searchTerm = s;
-        this.getPosts(s);
+      this.category.filter((cat) => {
+          if(cat.name.indexOf(this.searchTerm) > -1){
+              this.categoryId = cat.id;
+          }
+      });
+      this.story = new Array<any>();
+      this.getPosts(this.categoryId);
     }
 
 }
