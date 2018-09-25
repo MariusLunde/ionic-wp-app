@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController} from 'ionic-angular';
 import { ServiceProvider} from "../../providers/service/service";
+import { File } from '@ionic-native/file';
+
 
 @Component({
   selector: 'page-home',
@@ -19,7 +21,7 @@ export class HomePage {
     categoryId: any;
 
 
-  constructor(public navCtrl: NavController, public service: ServiceProvider) {
+  constructor(public navCtrl: NavController, public service: ServiceProvider, private file: File) {
       !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
       this.category = this.service.getCategories();
   }
@@ -75,6 +77,10 @@ export class HomePage {
     toggleCategories() {
       this.showCategories ? this.showCategories = false : this.showCategories = true;
       console.log('hei');
+    }
+
+    toFavorites() {
+      this.navCtrl.push('FavoritesPage');
     }
 
 }

@@ -1,6 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title [innerHTML]="story.title.rendered"></ion-title>
+    <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+  </ion-toolbar>
+</ion-header>
+
+
 <ion-content padding>
 
-  <h3 [innerHTML]="story.title.rendered"></h3>
+  <ion-nav [root]="PostPage" no-lines #mycontent>
+  </ion-nav>
+
+  <ion-menu [enabled]="true" type="overlay" side="left" [content]="mycontent">
+    <ion-item style="text-align: center" block (click)="goBack()"><ion-icon name="arrow-back"></ion-icon>Go back</ion-item>
+    <ion-list>
+      <ion-item style="text-align: center" block menuClose (click)="save(story)">Save {{story.title.rendered}}</ion-item>
+    </ion-list>
+    <ion-item style="text-align: center"><ion-icon name="star"></ion-icon>Favorites</ion-item>
+
+  </ion-menu>
 
   <p [innerHTML]="story.content.rendered"></p>
 
