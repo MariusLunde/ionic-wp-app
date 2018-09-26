@@ -8,7 +8,7 @@
 
 
 <ion-content padding>
-  <div *ngIf="noFavs == true">
+  <div *ngIf="Favs == true">
     <ion-card *ngFor="let evt of story">
       <ion-card-content>
         <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
@@ -23,7 +23,7 @@
       </ion-row>
     </ion-card>
   </div>
-  <div *ngIf="noFavs==false" style="text-align: center">
+  <div *ngIf="Favs==false" style="text-align: center">
     <ion-icon name="alert" style="text-align: center"><p style="color: #8f8f8f">No favorites</p></ion-icon>
   </div>
 

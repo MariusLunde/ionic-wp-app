@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
+import {isEmpty} from "rxjs/operators";
 
 /**
  * Generated class for the FavoritesPage page.
@@ -17,16 +18,18 @@ import {Settings} from "../../shared/providers/settings/settings";
 export class FavoritesPage {
 
   public story: Array<any> = new Array<any>();
-  public noFavs: boolean = false;
+  public Favs: boolean = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings) {
 
           this.story = this.settings.getAll();
 
-            if(this.settings.getAll() == undefined) {
-              this.noFavs = false;
+            if(this.isEmpty(this.settings.getAll())) {
+              this.Favs = false;
+                console.log(this.settings.getAll());
+
             }else{
-              this.noFavs = true;
+              this.Favs = true;
 
                 console.log(this.settings.getAll());
 
@@ -37,6 +40,7 @@ export class FavoritesPage {
                         this.story[key] = this.story.pop();
                     }
                 }
+
             }
   }
 
@@ -45,6 +49,14 @@ export class FavoritesPage {
             story: story
         });
 
+    }
+
+    isEmpty(obj) {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
     }
 
 }

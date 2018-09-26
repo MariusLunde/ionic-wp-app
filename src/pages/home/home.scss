@@ -10,12 +10,6 @@ page-home {
     }
   }
 
-  ng-component{
-    &.app-root{
-      z-index: 10000;
-    }
-  }
-
   ion-menu{
     position: fixed;
     ion-item{
