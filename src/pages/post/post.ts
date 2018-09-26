@@ -25,7 +25,7 @@ export class PostPage {
 
   }
   goBack() {
-        this.navCtrl.push('HomePage');
+        this.navCtrl.pop();
   }
 
 }

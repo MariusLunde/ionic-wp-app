@@ -7,7 +7,7 @@
 
 
 <ion-content padding>
-  <ion-menu [enabled]="true" type="overlay" side="left" [content]="mycontent">
+  <ion-menu type="overlay" side="left" [content]="mycontent">
     <ion-title style="text-align: center" padding>Categories</ion-title>
     <ion-list>
       <ion-item *ngFor="let s of category" block menuClose (click)="search(s.name)">{{s.name}}</ion-item>

@@ -10,6 +10,12 @@ page-home {
     }
   }
 
+  ng-component{
+    &.app-root{
+      z-index: 10000;
+    }
+  }
+
   ion-menu{
     ion-item{
       text-align: center;

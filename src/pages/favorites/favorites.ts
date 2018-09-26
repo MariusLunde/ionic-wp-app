@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Settings} from "../../shared/providers/settings/settings";
 
 /**
  * Generated class for the FavoritesPage page.
@@ -15,11 +16,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class FavoritesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public story: any;
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings) {
+
+      this.story = this.settings.getAll();
+
+
+
+      this.story = Object.keys(this.story).map(key => this.story[key]);
+
+      for(let key in this.story){
+          if(this.story[key] == null){
+            this.story[key] =  this.story.pop();
+          }
+      }
+      
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FavoritesPage');
-  }
 
 }
