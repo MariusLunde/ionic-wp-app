@@ -138,6 +138,11 @@ export class Settings {
         return this.save();
     }
 
+    public delete(key: string) {
+        delete this.settings[key];
+        return this.save();
+    }
+
     /**
      * Overwrite current settings with new set
      *

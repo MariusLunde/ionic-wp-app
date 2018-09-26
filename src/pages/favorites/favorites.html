@@ -8,17 +8,23 @@
 
 
 <ion-content padding>
-  <ion-card *ngFor="let evt of story">
-    <ion-card-content>
-      <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
-      <p [innerHTML]="evt.content.rendered"></p>
-    </ion-card-content>
-    <ion-row no-padding>
-      <ion-col text-right>
-        <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
-          Read More
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
+  <div *ngIf="noFavs == true">
+    <ion-card *ngFor="let evt of story">
+      <ion-card-content>
+        <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
+        <p [innerHTML]="evt.content.rendered"></p>
+      </ion-card-content>
+      <ion-row no-padding>
+        <ion-col text-right>
+          <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
+            Read More
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+  <div *ngIf="noFavs==false" style="text-align: center">
+    <ion-icon name="alert" style="text-align: center"><p style="color: #8f8f8f">No favorites</p></ion-icon>
+  </div>
+
 </ion-content>

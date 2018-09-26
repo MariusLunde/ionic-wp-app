@@ -16,23 +16,35 @@ import {Settings} from "../../shared/providers/settings/settings";
 })
 export class FavoritesPage {
 
-  public story: any;
+  public story: Array<any> = new Array<any>();
+  public noFavs: boolean = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings) {
 
-      this.story = this.settings.getAll();
+          this.story = this.settings.getAll();
 
+            if(this.settings.getAll() == undefined) {
+              this.noFavs = false;
+            }else{
+              this.noFavs = true;
 
+                console.log(this.settings.getAll());
 
-      this.story = Object.keys(this.story).map(key => this.story[key]);
+                this.story = Object.keys(this.story).map(key => this.story[key]);
 
-      for(let key in this.story){
-          if(this.story[key] == null){
-            this.story[key] =  this.story.pop();
-          }
-      }
-      
+                for (let key in this.story) {
+                    if (this.story[key] == null) {
+                        this.story[key] = this.story.pop();
+                    }
+                }
+            }
   }
 
+    postTapped(story : any) {
+        this.navCtrl.push('PostPage', {
+            story: story
+        });
+
+    }
 
 }

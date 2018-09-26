@@ -1,7 +1,8 @@
 <ion-header>
   <ion-navbar>
     <ion-title [innerHTML]="story.title.rendered"></ion-title>
-    <ion-icon name="bookmark" style="right: 2vh; top: 0.5vh; font-size: 4vh;position: absolute" (click)="save(story)"></ion-icon>
+    <ion-icon *ngIf="saved == true" name="ios-book" style="right: 2vh; top: 0.5vh; font-size: 4vh;position: absolute" (click)="delete(story)"></ion-icon>
+    <ion-icon *ngIf="saved == false" name="ios-book-outline" style="right: 2vh; top: 0.5vh; font-size: 4vh;position: absolute" (click)="save(story)"></ion-icon>
 
   </ion-navbar>
 

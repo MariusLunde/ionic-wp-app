@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController} from 'ionic-angular';
 import { ServiceProvider} from "../../providers/service/service";
 import { File } from '@ionic-native/file';
+import {Settings} from "../../shared/providers/settings/settings";
 
 
 @Component({
@@ -21,9 +22,10 @@ export class HomePage {
     categoryId: any;
 
 
-  constructor(public navCtrl: NavController, public service: ServiceProvider, private file: File) {
+  constructor(public navCtrl: NavController, public service: ServiceProvider, private file: File, public settings: Settings) {
       !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
       this.category = this.service.getCategories();
+
   }
 
   getPosts(s) {
@@ -40,6 +42,7 @@ export class HomePage {
         this.navCtrl.push('PostPage', {
             story: story
         });
+
     }
 
 
@@ -76,7 +79,6 @@ export class HomePage {
 
     toggleCategories() {
       this.showCategories ? this.showCategories = false : this.showCategories = true;
-      console.log('hei');
     }
 
     toFavorites() {
