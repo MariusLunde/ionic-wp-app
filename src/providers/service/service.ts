@@ -17,18 +17,18 @@ export class ServiceProvider {
 
   }
 
-    getRecentPosts(categoryId: number) {
-
-        let ifSearch;
 
 
-        categoryId == undefined ? categoryId = 17 : categoryId;
+    getRecentPosts(categoryId:number, page:number = 1) {
+        let category_url = categoryId? ("&categories=" + categoryId): "";
 
-        categoryId == 17 ? ifSearch = "posts" :  ifSearch = "posts?categories=" + categoryId;
-
-        return this.http.get(Config.WORDPRESS_REST_API_URL + ifSearch);
-
+        return this.http.get(
+            Config.WORDPRESS_REST_API_URL
+            + 'posts?1&page='+ page
+            + category_url);
     }
+
+
 
     getCategories() {
         this.http.get(Config.WORDPRESS_REST_API_URL + "categories").subscribe(data => {

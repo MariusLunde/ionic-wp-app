@@ -10,10 +10,12 @@
   </ion-fab>
     <div>
       <ion-card *ngFor="let evt of story">
+        <div class="card-content">
         <ion-card-content>
           <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
           <p [innerHTML]="evt.content.rendered"></p>
         </ion-card-content>
+        </div>
         <ion-row no-padding>
           <ion-col text-right>
             <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
@@ -23,9 +25,9 @@
         </ion-row>
       </ion-card>
     </div>
-  <ion-infinite-scroll *ngIf="morePagesAvailable" [enabled]="morePagesAvailable" (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll *ngIf="morePagesAvailable" (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content
-            loadingSpinner="dots"
+            loadingSpinner="bubbles"
             loadingText="Loading more posts ...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>

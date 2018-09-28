@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import { NavController , NavParams} from 'ionic-angular';
 import { ServiceProvider} from "../../providers/service/service";
 import {Settings} from "../../shared/providers/settings/settings";
@@ -12,19 +12,16 @@ export class HomePage {
     public story: Array<any> = new Array<any>();
     public category: any;
 
-    morePagesAvailable: boolean = false;
+    morePagesAvailable: boolean = true;
+
 
     searchTerm: string;
 
     categoryId: any;
 
 
-  constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams) {
-      !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
-
+  constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams, private zone: NgZone) {
       this.category = this.service.getCategories();
-
-
 
       this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
 
@@ -35,10 +32,8 @@ export class HomePage {
   getPosts() {
       this.service.getRecentPosts(this.categoryId).subscribe(data => {
           for(let key in data){
-              if(data[key] != this.story[key]) {
                   this.story[key] = data[key];
               }
-          }
       });
   }
 
@@ -48,18 +43,6 @@ export class HomePage {
         });
     }
 
-
-    doInfinite(infiniteScroll) {
-
-        this.service.getRecentPosts(this.categoryId)
-            .subscribe(data => {
-                if(data) {
-                    infiniteScroll.complete();
-                    this.getPosts();
-                }
-
-            });
-    }
 
 
     doRefresh(){
@@ -80,14 +63,27 @@ export class HomePage {
     }
 
 
+    doInfinite(infiniteScroll) {
+        let page = Math.ceil(this.story.length / 10) + 1;
+        this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
+                for(let key in data){
+                        this.story.push(data[key]);
+                        infiniteScroll.complete();
+                }
+            }, err => {
+            this.morePagesAvailable = false;
+
+            console.log(Object.keys(this.story));
+         });
+        }
+
+
     toFavorites() {
 
         this.navCtrl.push('FavoritesPage');
     }
 
     toCategories() {
-        console.log(this.category);
-
         this.navCtrl.push('CategoriesPage', {
             cat: this.category
         });
