@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController} from 'ionic-angular';
+import { NavController , NavParams} from 'ionic-angular';
 import { ServiceProvider} from "../../providers/service/service";
-import { File } from '@ionic-native/file';
 import {Settings} from "../../shared/providers/settings/settings";
-
 
 @Component({
   selector: 'page-home',
@@ -14,21 +12,27 @@ export class HomePage {
     public story: Array<any> = new Array<any>();
     public category: any;
 
-    morePagesAvailable: boolean = true;
-    showCategories: boolean;
+    morePagesAvailable: boolean = false;
 
     searchTerm: string;
 
     categoryId: any;
 
 
-  constructor(public navCtrl: NavController, public service: ServiceProvider, private file: File, public settings: Settings) {
+  constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams) {
       !this.story == undefined ? this.morePagesAvailable = true : this.morePagesAvailable = false;
+
       this.category = this.service.getCategories();
+
+
+
+      this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
+
+      this.search();
 
   }
 
-  getPosts(s) {
+  getPosts() {
       this.service.getRecentPosts(this.categoryId).subscribe(data => {
           for(let key in data){
               if(data[key] != this.story[key]) {
@@ -42,7 +46,6 @@ export class HomePage {
         this.navCtrl.push('PostPage', {
             story: story
         });
-
     }
 
 
@@ -52,37 +55,42 @@ export class HomePage {
             .subscribe(data => {
                 if(data) {
                     infiniteScroll.complete();
-                    this.getPosts(this.searchTerm);
+                    this.getPosts();
                 }
 
             });
     }
 
-    doRefresh(refresher){
+
+    doRefresh(){
         this.service.getRecentPosts(this.categoryId).subscribe(data => {
-            this.getPosts(this.searchTerm);
+            this.getPosts();
             this.service.getCategories();
         });
-        return refresher.complete();
     }
 
-    search(s) {
-      this.searchTerm = s;
-      this.category.filter((cat) => {
-          if(cat.name.indexOf(this.searchTerm) > -1){
-              this.categoryId = cat.id;
-          }
-      });
-      this.story = new Array<any>();
-      this.getPosts(this.categoryId);
+    search() {
+          this.category.filter((cat) => {
+              if(cat.name.indexOf(this.searchTerm) > -1){
+                  this.categoryId = cat.id;
+              }
+          });
+          this.story = new Array<any>();
+          this.getPosts();
     }
 
-    toggleCategories() {
-      this.showCategories ? this.showCategories = false : this.showCategories = true;
-    }
 
     toFavorites() {
-      this.navCtrl.push('FavoritesPage');
+
+        this.navCtrl.push('FavoritesPage');
+    }
+
+    toCategories() {
+        console.log(this.category);
+
+        this.navCtrl.push('CategoriesPage', {
+            cat: this.category
+        });
     }
 
 }

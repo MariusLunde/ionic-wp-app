@@ -7,8 +7,11 @@
 
 
 <ion-content padding>
-  <ion-fab bottom right *ngIf="!saved">
-      <button ion-fab color="dark" *ngIf="button" (click)="save(story)"><ion-icon name="add"></ion-icon></button>
+
+  <ion-fab bottom right>
+    <div *ngIf="saved == false">
+      <button ion-fab color="dark" *ngIf="button" (click)="delete(story)"><ion-icon name="remove"></ion-icon></button>
+    </div>
   </ion-fab>
   <p [innerHTML]="story.content.rendered"></p>
 

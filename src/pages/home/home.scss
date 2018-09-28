@@ -1,7 +1,11 @@
 page-home {
+
+  -webkit-backdrop-filter: grayscale(black);
+
   ion-card-content {
     max-height: 15vh;
   }
+
   .list{
     ion-item {
       display: block;
@@ -10,12 +14,14 @@ page-home {
     }
   }
 
-  ion-menu{
-    position: fixed;
+
+
+
     ion-item{
+
       text-align: center;
     }
 
   }
 
-}
+

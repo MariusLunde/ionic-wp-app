@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule, Provider} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -13,7 +13,8 @@ import {Settings} from "../shared/providers/settings/settings";
 import { IonicStorageModule, Storage} from "@ionic/storage";
 import { File} from "@ionic-native/file";
 import { FilePath } from '@ionic-native/file-path';
-
+import { FabContainer} from "ionic-angular";
+import { Brightness} from "@ionic-native/brightness";
 
 
 export function provideSettings(storage: Storage) {
@@ -46,6 +47,8 @@ export function provideSettings(storage: Storage) {
         ServiceProvider,
         File,
         FilePath,
+        FabContainer,
+        Brightness,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         {provide: Settings, useFactory: provideSettings, deps: [Storage]},
 

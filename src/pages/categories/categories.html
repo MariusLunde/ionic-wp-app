@@ -1,0 +1,22 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Categories</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+        <div>
+        <ion-grid>
+          <ion-row justify-content-around text-center>
+            <ion-col *ngFor="let s of category" >
+              <button color="dark"  ion-button (click)="search(s.name)">{{s.name}}</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+</ion-content>
