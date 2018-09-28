@@ -32,7 +32,7 @@ export class PostPage {
     ngAfterViewInit() {
 
         this.content.ionScroll.subscribe((data)=>{
-            data.scrollTop >= this.content.getContentDimensions().scrollHeight - 500 ? this.button = false : this.button = true;
+            data.scrollTop >= this.content.getContentDimensions().scrollHeight - 1000 ? this.button = false : this.button = true;
 
             if(this.button == false) {
                 this.change.run(() => {
