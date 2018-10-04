@@ -10,11 +10,11 @@
   <ion-fab bottom right *ngIf="!saved">
       <button ion-fab color="dark" *ngIf="button" (click)="save(story)"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
-
+  <img *ngIf="story._embedded['wp:featuredmedia']['0'].source_url" [src]="story._embedded['wp:featuredmedia']['0'].source_url">
   <p [innerHTML]="story.content.rendered"></p>
-  <!--<ion-row class="cat" *ngFor="let cat of category; let i=index" col-sm-1="1">-->
-    <!--<ion-badge *ngIf="i < 3" class="cat" [innerHTML]="cat.name"></ion-badge>-->
-  <!--</ion-row>-->
+  <ion-row class="cat" *ngFor="let cat of category; let i=index" col-sm-1="1">
+    <ion-badge *ngIf="i < 3" class="cat" [innerHTML]="cat.name"></ion-badge>
+  </ion-row>
   <ion-badge color="dark" class="time" [innerHTML]="'Date: ' + story.date.split('T')[0]"></ion-badge>
   <ion-title color="dark">Comments</ion-title>
   <ion-card *ngFor="let comment of commetns" class="card-content">

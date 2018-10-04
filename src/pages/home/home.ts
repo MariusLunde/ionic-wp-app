@@ -1,101 +1,181 @@
-import {Component, NgZone} from '@angular/core';
-import { NavController , NavParams} from 'ionic-angular';
-import { ServiceProvider} from "../../providers/service/service";
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
+import {ServiceProvider} from "../../providers/service/service";
 import {Settings} from "../../shared/providers/settings/settings";
+import {promises} from "fs";
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+    selector: 'page-home',
+    templateUrl: 'home.html'
 })
 export class HomePage {
 
+    /**
+     * List of posts retrieved from wordpress
+     */
     public story: Array<any> = new Array<any>();
-    public category: any;
-    image: any;
 
+    /**
+     * Currently selected category
+     *
+     * category is an array og numbers relative to categories-ids found in WordPress Rest API.
+     */
+    public category: any;
+
+
+    /**
+     *
+     */
+    public ready: boolean = false;
+    /**
+     * Flag set if more pages are available for download
+     */
     morePagesAvailable: boolean = true;
 
-
+    /**
+     * searchTerm is a string for seaching through the categories array to find ids to keep in catoryId.
+     */
     searchTerm: string;
 
+    /**
+     * Array of ids relative to the WordPress site to use as parameters for the getRecentPosts function in Service.ts.
+     */
     categoryId: any;
 
 
-  constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams, private zone: NgZone) {
-      this.category = this.service.getCategories();
+    /**
+     * Initialize page components and prepare required data
+     *
+     * @param navCtrl NavController component
+     * @param service Service of functions with http.get methods
+     * @param settings App settings, persistently stored locally between sessions.
+     * @param navParam NavParams supplied by Ionic on page creation
+     */
+    constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams) {
+        this.category = this.service.getCategories();
 
-      this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
+        this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
 
-      this.search();
-
+        this.search();
 
   }
-
+    /**
+     * Retrieve recent posts through the WordPress API
+     *
+     * return promise of stories, else returns errormsg.
+     */
   getPosts() {
-      this.service.getRecentPosts(this.categoryId).subscribe(data => {
-          for(let key in data){
-                  this.story[key] = data[key];
-                  console.log(data[key]);
-                  this.image = data[key];
-                  // console.log(this.image);
-          }
+      return new Promise((resolve, reject) => {
+          this.service.getRecentPosts(this.categoryId).subscribe(data => {
+              if (data !== null) {
+                  for(let key in data){
+                      this.story[key] = data[key];
+                  }
+                  this.ready = true;
+                  resolve(this.story);
+              } else {
+                  reject("Unable to load the stories!");
+              }
+          });
+
+
       });
-
-      this.service.getRecentPostsImages(this.categoryId).subscribe(data=> {
-          for(let key in data){
-              console.log(data[key]._embedded['wp:featuredmedia']['0'].source_url);
-
-          }
-      });
-
   }
 
-    postTapped(story : any) {
+    /**
+     * Description here
+     *
+     * if post is pressed, pushes to PostPage with parameter of current story.
+     *
+     * @param story
+     */
+    postTapped(story: any) {
         this.navCtrl.push('PostPage', {
             story: story
         });
     }
 
 
-
-    doRefresh(){
+    /**
+     * Description here
+     *
+     * gets posts with promise of returned stories, else errormsg is logged.
+     */
+    doRefresh() {
         this.service.getRecentPosts(this.categoryId).subscribe(data => {
-            this.getPosts();
-            this.service.getCategories();
+            this.getPosts().then((stories) => {
+                console.log("Stories loaded ok!");
+                this.service.getCategories();
+            }).catch((errorMsg) => {
+                console.error(errorMsg);
+            });
+
         });
     }
 
+    /**
+     * Description here
+     *
+     * Filters catgory to check for values.
+     * Sets new values for categoryId if value is found.
+     * done? initiates stories and refires getPosts.
+     * onreject? logs errorMsg.
+     */
     search() {
-          this.category.filter((cat) => {
-              if(cat.name.indexOf(this.searchTerm) > -1){
-                  this.categoryId = cat.id;
-              }
-          });
-          this.story = new Array<any>();
-          this.getPosts();
+        this.category.filter((cat) => {
+            if (cat.name.indexOf(this.searchTerm) > -1) {
+                this.categoryId = cat.id;
+            }
+        });
+        this.story = new Array<any>();
+        this.getPosts().then(stories =>{
+            console.log(stories);
+        }).catch((errorMsg) =>{
+            console.log(errorMsg);
+        });
     }
 
 
+    /**
+     * Description here
+     *
+     * If scrolled to bottom of page return promise of new stories added, else return errormsg.
+     */
     doInfinite(infiniteScroll) {
-        let page = Math.ceil(this.story.length / 10) + 1;
-        this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
-                for(let key in data){
+        return new Promise(((resolve, reject) => {
+            let page = Math.ceil(this.story.length / 10) + 1;
+            this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
+                if(data !== null){
+                    for (let key in data) {
                         this.story.push(data[key]);
                         infiniteScroll.complete();
+                        resolve(this.story);
+                    }
+                }else{
+                    this.morePagesAvailable = false;
+                    reject('found no more posts');
                 }
-            }, err => {
-            this.morePagesAvailable = false;
+            });
+        }));
 
-            console.log(Object.keys(this.story));
-         });
-        }
+    }
 
 
+    /**
+     * Description here
+     *
+     * Pushes to FavoritesPage.
+     */
     toFavorites() {
 
         this.navCtrl.push('FavoritesPage');
     }
 
+    /**
+     * Description here
+     *
+     * Pushes to CategoriesPage.
+     */
     toCategories() {
         this.navCtrl.push('CategoriesPage', {
             cat: this.category

@@ -10,10 +10,12 @@
 <ion-content padding>
   <div *ngIf="Favs == true">
     <ion-card *ngFor="let evt of story">
+      <div *ngIf="evt._embedded['wp:featuredmedia']">
       <ion-card-content>
         <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
-        <p [innerHTML]="evt.content.rendered"></p>
+        <img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">
       </ion-card-content>
+      </div>
       <ion-row no-padding>
         <ion-col text-right>
           <button ion-button color="dark" (click)="postTapped(evt)" icon-start>

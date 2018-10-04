@@ -1,5 +1,9 @@
 page-favorites {
   ion-card-content {
-    max-height: 15vh;
+    max-height: inherit;
   }
+}
+.fixed-content{
+  background-color: #eeeeee!important;
+
 }

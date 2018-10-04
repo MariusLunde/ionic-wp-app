@@ -2,15 +2,10 @@ page-home {
 
   -webkit-backdrop-filter: grayscale(black);
 
-  .card-content {
-    max-height: 25vh !important;
+  .fixed-content{
+    background-color: #eeeeee!important;
+
   }
-
-
-  ion-card-content {
-    max-height: 25vh !important;
-  }
-
 
   .list{
     ion-item {
@@ -19,7 +14,6 @@ page-home {
       margin: 5px;
     }
   }
-
 
 
 

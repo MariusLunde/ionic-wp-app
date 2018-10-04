@@ -9,16 +9,18 @@
   </ion-fab-list>
   </ion-fab>
     <div>
-      <ion-card *ngFor="let evt of story">
-        <div class="card-content">
-        <ion-card-content>
-          <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
+      <ion-card style="padding: 0;" *ngFor="let evt of story">
+        <div style="padding: 0;" class="card-content" *ngIf="evt._embedded['wp:featuredmedia']" (click)="postTapped(evt)">
+        <ion-card-content style="padding: 0;">
+          <img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">
+          <ion-card-title style="padding: 2vh;" [innerHTML]="evt.title.rendered"></ion-card-title>
+          <p style="padding: 2vh;" [innerHTML]="evt.excerpt.rendered"></p>
         </ion-card-content>
         </div>
         <ion-row no-padding>
           <ion-col text-right>
-            <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
-              Read More
+            <button ion-button outline no-border color="dark" icon-start (click)="postTapped(evt)">
+              Read More >>
             </button>
           </ion-col>
         </ion-row>
