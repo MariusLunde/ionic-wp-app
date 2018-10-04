@@ -34,6 +34,7 @@ export class HomePage {
           for(let key in data){
                   this.story[key] = data[key];
               }
+            console.log(this.story);
       });
   }
 

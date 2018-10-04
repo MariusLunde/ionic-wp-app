@@ -24,14 +24,19 @@ export class ServiceProvider {
 
         return this.http.get(
             Config.WORDPRESS_REST_API_URL
-            + 'posts?1&page='+ page
+            + 'posts/?post=1&page='+ page
             + category_url);
     }
 
 
 
+    getComments(post) {
+        return this.http.get(Config.WORDPRESS_REST_API_URL + 'comments/?post=' + post);
+
+    }
+
     getCategories() {
-        this.http.get(Config.WORDPRESS_REST_API_URL + "categories").subscribe(data => {
+        this.http.get(Config.WORDPRESS_REST_API_URL + "categories/").subscribe(data => {
             for(let key in data){
                 this.category[key] = data[key];
             }

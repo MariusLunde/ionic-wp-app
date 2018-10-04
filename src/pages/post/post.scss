@@ -18,6 +18,29 @@ page-post {
     }
   }
 
+  .card-content {
+    max-height: 15vh;
+  }
+
+  .time{
+    display: block;
+    right: 3vh;
+    bottom: 3vh;
+  }
+
+  .cat{
+    display: block;
+    right: 3vh;
+    bottom: 3vh;
+  }
+
+
+
+  ion-card-content {
+    text-justify: inter-word;
+  }
+
+
   .hide{
     display: none;
   }

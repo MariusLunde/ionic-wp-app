@@ -1,6 +1,7 @@
 import {Component, NgZone, ViewChild} from '@angular/core';
 import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
+import {ServiceProvider} from "../../providers/service/service";
 
 
 @IonicPage()
@@ -16,15 +17,25 @@ export class PostPage {
     story: any;
     saved: boolean = false;
     button: boolean = true;
+    commetns: Array<any> = new Array<any>();
+    category: any;
 
 
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings, public change: NgZone) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings, public change: NgZone, public service: ServiceProvider) {
         this.story = this.navParams.get('story');
 
-        this.settings.get(this.story.title.rendered) ? this.saved = true : this.saved = false;
+        this.category = this.service.getCategories();
 
+        this.settings.get(this.story.name) ? this.saved = true : this.saved = false;
 
+        this.service.getComments(this.story.id).subscribe(data => {
+            for(let key in data){
+
+                this.commetns[key] = data[key];
+                console.log(this.commetns)
+            }
+        })
 
   }
 
@@ -52,7 +63,6 @@ export class PostPage {
           this.saved = true;
 
       }
-
   }
 
 
