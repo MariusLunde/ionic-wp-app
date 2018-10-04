@@ -11,6 +11,7 @@ export class HomePage {
 
     public story: Array<any> = new Array<any>();
     public category: any;
+    image: any;
 
     morePagesAvailable: boolean = true;
 
@@ -27,15 +28,26 @@ export class HomePage {
 
       this.search();
 
+
   }
 
   getPosts() {
       this.service.getRecentPosts(this.categoryId).subscribe(data => {
           for(let key in data){
                   this.story[key] = data[key];
-              }
-            console.log(this.story);
+                  console.log(data[key]);
+                  this.image = data[key];
+                  // console.log(this.image);
+          }
       });
+
+      this.service.getRecentPostsImages(this.categoryId).subscribe(data=> {
+          for(let key in data){
+              console.log(data[key]._embedded['wp:featuredmedia']['0'].source_url);
+
+          }
+      });
+
   }
 
     postTapped(story : any) {

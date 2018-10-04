@@ -30,6 +30,16 @@ export class ServiceProvider {
 
 
 
+    getRecentPostsImages(categoryId:number, page:number = 1) {
+        let category_url = categoryId? ("&categories=" + categoryId): "";
+
+        return this.http.get(
+            Config.WORDPRESS_REST_API_URL
+            + 'posts/_embed&post=1&page='+ page
+            + category_url);
+    }
+
+
     getComments(post) {
         return this.http.get(Config.WORDPRESS_REST_API_URL + 'comments/?post=' + post);
 
