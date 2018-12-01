@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {ServiceProvider} from "../../providers/service/service";
 import {Settings} from "../../shared/providers/settings/settings";
-import {promises} from "fs";
+import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
+
 
 @Component({
     selector: 'page-home',
@@ -51,13 +52,20 @@ export class HomePage {
      * @param settings App settings, persistently stored locally between sessions.
      * @param navParam NavParams supplied by Ionic on page creation
      */
-    constructor(public navCtrl: NavController, public service: ServiceProvider, public settings: Settings, public navParam: NavParams) {
+    constructor(public navCtrl: NavController,
+                public service: ServiceProvider,
+                public settings: Settings,
+                public navParam: NavParams,
+                public auth: AuthenticationService) {
         this.category = this.service.getCategories();
 
         this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
 
         this.search();
 
+        this.service.getHeader().subscribe(resp => {
+            console.log(resp.headers.get('X-Token'));
+        });
   }
     /**
      * Retrieve recent posts through the WordPress API
@@ -89,12 +97,13 @@ export class HomePage {
      *
      * @param story
      */
-    postTapped(story: any) {
-        this.navCtrl.push('PostPage', {
-            story: story
-        });
-    }
 
+
+    postTapped(evt) {
+        this.navCtrl.push('PostPage', {
+            story: evt
+        })
+    }
 
     /**
      * Description here
@@ -142,22 +151,21 @@ export class HomePage {
      * If scrolled to bottom of page return promise of new stories added, else return errormsg.
      */
     doInfinite(infiniteScroll) {
-        return new Promise(((resolve, reject) => {
-            let page = Math.ceil(this.story.length / 10) + 1;
-            this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
-                if(data !== null){
-                    for (let key in data) {
-                        this.story.push(data[key]);
-                        infiniteScroll.complete();
-                        resolve(this.story);
-                    }
-                }else{
-                    this.morePagesAvailable = false;
-                    reject('found no more posts');
-                }
-            });
-        }));
+            return new Promise(((resolve, reject) => {
+                let page = Math.ceil(this.story.length / 10) + 1;
+                this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
+                    if(data !== undefined){
+                        for (let key in data) {
+                            this.story.push(data[key]);
+                            infiniteScroll.complete();
+                            resolve(this.story);
+                        }
+                    }else{
 
+                        reject('found no more posts');
+                    }
+                });
+            }));
     }
 
 
@@ -180,6 +188,12 @@ export class HomePage {
         this.navCtrl.push('CategoriesPage', {
             cat: this.category
         });
+    }
+
+    logOut() {
+        this.navCtrl.push('LoginPage');
+
+        this.auth.logOut();
     }
 
 }

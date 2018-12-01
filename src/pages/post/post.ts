@@ -2,6 +2,7 @@ import {Component, NgZone, ViewChild} from '@angular/core';
 import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
 import {ServiceProvider} from "../../providers/service/service";
+import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
 
 
 @IonicPage()
@@ -34,6 +35,8 @@ export class PostPage {
      */
     category: any;
 
+    contentShown: any;
+
 
     /**
      *
@@ -43,8 +46,18 @@ export class PostPage {
      * @param settings App settings, persistently stored locally between sessions.
      * @param change updates HTML code using (.run) command to check if button should be shown.
      */
-    constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings, public change: NgZone, public service: ServiceProvider) {
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                public settings: Settings,
+                public change: NgZone,
+                public service: ServiceProvider,
+                private auth: AuthenticationService
+    ){
         this.story = this.navParams.get('story');
+
+        // this.service.getElementorPost(this.story.id).subscribe(data => {
+        //     this.contentShown = data;
+        // });
 
         this.category = this.service.getCategories();
 
@@ -90,6 +103,10 @@ export class PostPage {
           this.saved = true;
 
       }
+  }
+
+  createComment(input) {
+      this.service.createComment(this.auth.getUser().value.token, input);
   }
 
     /**

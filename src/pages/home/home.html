@@ -2,21 +2,22 @@
 <ion-content padding>
 
   <ion-fab bottom left #fab>
-    <button ion-fab color="dark" class="fab1"><ion-icon name="menu"></ion-icon></button>
+    <button ion-fab color="primary" class="fab1"><ion-icon name="menu"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab color="dark" side="right" class="fabFav" (click)="toCategories(fab1)" ><ion-icon name="add"></ion-icon></button>
-    <button ion-fab color="dark" side="right" class="fabFav" (click)="toFavorites(fab1)" ><ion-icon name="star"></ion-icon></button>
-  </ion-fab-list>
+      <button ion-fab color="primary" side="right" class="fabFav" (click)="toCategories(fab1)" ><ion-icon name="add"></ion-icon></button>
+      <button ion-fab color="primary" side="right" class="fabFav" (click)="toFavorites(fab1)" ><ion-icon name="star"></ion-icon></button>
+      <button ion-fab color="primary" side="right" class="fabFav" (click)="logOut(fab1)" ><ion-icon name="moon"></ion-icon></button>
+
+    </ion-fab-list>
   </ion-fab>
     <div>
       <ion-card style="padding: 0;" *ngFor="let evt of story">
-        <div style="padding: 0;" class="card-content" *ngIf="evt._embedded['wp:featuredmedia']" (click)="postTapped(evt)">
+        <!--<div style="padding: 0;" class="card-content" *ngIf="evt._embedded['wp:featuredmedia']" (click)="postTapped(evt)">-->
         <ion-card-content style="padding: 0;">
-          <img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">
+          <!--<img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">-->
           <ion-card-title style="padding: 2vh;" [innerHTML]="evt.title.rendered"></ion-card-title>
           <p style="padding: 2vh;" [innerHTML]="evt.excerpt.rendered"></p>
         </ion-card-content>
-        </div>
         <ion-row no-padding>
           <ion-col text-right>
             <button ion-button outline no-border color="dark" icon-start (click)="postTapped(evt)">

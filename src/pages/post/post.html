@@ -7,11 +7,14 @@
 
 
 <ion-content padding>
-  <ion-fab bottom right *ngIf="!saved">
-      <button ion-fab color="dark" *ngIf="button" (click)="save(story)"><ion-icon name="add"></ion-icon></button>
+  <ion-fab bottom right #fab >
+    <button ion-fab color="primary" *ngIf="!saved" class="fab1"><ion-icon name="menu"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button ion-fab color="primary" (click)="createComment()"><ion-icon name="create"></ion-icon></button>
+        <button ion-fab color="primary" *ngIf="button" (click)="save(story)"><ion-icon name="add"></ion-icon></button>
+    </ion-fab-list>
   </ion-fab>
-  <img *ngIf="story._embedded['wp:featuredmedia']['0'].source_url" [src]="story._embedded['wp:featuredmedia']['0'].source_url">
-  <p [innerHTML]="story.content.rendered"></p>
+  <p [innerHTML]='story.content.rendered'></p>
   <ion-row class="cat" *ngFor="let cat of category; let i=index" col-sm-1="1">
     <ion-badge *ngIf="i < 3" class="cat" [innerHTML]="cat.name"></ion-badge>
   </ion-row>

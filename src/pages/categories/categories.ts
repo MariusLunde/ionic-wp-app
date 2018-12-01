@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage} from "../home/home";
+import {debuglog, log} from "util";
 
 
 /**
@@ -23,9 +24,16 @@ export class CategoriesPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
       this.category = this.navParams.get('cat');
+
   }
 
     search(s){
+        // if (s == 'all') {
+        //     this.searchTerm = '0' ;
+        // }else{
+        //     this.searchTerm = s;
+        // }
+
         this.searchTerm = s;
 
         this.navCtrl.push(HomePage, {

@@ -15,6 +15,8 @@ import { File} from "@ionic-native/file";
 import { FilePath } from '@ionic-native/file-path';
 import { FabContainer} from "ionic-angular";
 import { Brightness} from "@ionic-native/brightness";
+import {LoginPage} from "../pages/login/login";
+import {LoginPageModule} from "../pages/login/login.module";
 
 
 export function provideSettings(storage: Storage) {
@@ -28,18 +30,20 @@ export function provideSettings(storage: Storage) {
 @NgModule({
     declarations: [
         MyApp,
-        HomePage
+        HomePage,
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
+        LoginPageModule,
         IonicModule.forRoot(MyApp),
         IonicStorageModule.forRoot(),
     ],
     bootstrap: [IonicApp],
     entryComponents: [
         MyApp,
-        HomePage
+        HomePage,
+        LoginPage
     ],
     providers: [
         StatusBar,
