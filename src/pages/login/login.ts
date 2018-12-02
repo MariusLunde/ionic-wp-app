@@ -6,6 +6,8 @@ import {ServiceProvider} from "../../providers/service/service";
 import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {HomePage} from "../home/home";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 /**
  * Generated class for the LoginPage page.
@@ -31,6 +33,7 @@ export class LoginPage {
         public formBuilder: FormBuilder,
         public service: ServiceProvider,
         public authenticationService: AuthenticationService,
+        public http: HttpClient
     ) {}
 
     ionViewWillLoad() {
@@ -48,20 +51,14 @@ export class LoginPage {
 
         this.authenticationService.doLogin(value.username, value.password)
             .subscribe(res => {
-                console.log('foo');
-                    this.authenticationService.setUser({
-                        token: value.token,
-                        username: value.username,
-                        displayname: value.user_display_name,
-                        email: value.user_email
-                    });
-
+                    this.authenticationService.setUser(res);
+                    console.log(res);
                     loading.dismiss();
                     this.navCtrl.setRoot(HomePage);
                 },
                 err => {
                     loading.dismiss();
-                    this.error_message = "Invalid credentials. Try with username 'aa' password 'aa'.";
+                    this.error_message = "Invalid credentials. Try with username or password.";
                     console.log(err);
                 })
     }

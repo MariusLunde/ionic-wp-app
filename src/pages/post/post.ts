@@ -3,6 +3,8 @@ import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
 import {ServiceProvider} from "../../providers/service/service";
 import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
+import { AlertController } from 'ionic-angular';
+
 
 
 @IonicPage()
@@ -37,6 +39,8 @@ export class PostPage {
 
     contentShown: any;
 
+    input: string;
+
 
     /**
      *
@@ -51,7 +55,8 @@ export class PostPage {
                 public settings: Settings,
                 public change: NgZone,
                 public service: ServiceProvider,
-                private auth: AuthenticationService
+                private auth: AuthenticationService,
+                public alertCon: AlertController
     ){
         this.story = this.navParams.get('story');
 
@@ -71,7 +76,6 @@ export class PostPage {
             }
         });
 
-        console.log(this.story);
 
   }
 
@@ -105,8 +109,34 @@ export class PostPage {
       }
   }
 
-  createComment(input) {
-      this.service.createComment(this.auth.getUser().value.token, input);
+  createComment() {
+      let alert = this.alertCon.create({
+          title: 'Create comment',
+          inputs: [
+              {
+                  name: 'comment',
+                  placeholder: 'Comment',
+                  handler: data => {
+                      this.input = data.value;
+                  }
+              }
+          ],
+          buttons: [
+              {
+                  text: 'Cancel',
+                  role: 'cancel'
+              },
+              {
+                  text: 'Submit',
+                  handler: data => {
+                      this.service.createComment(this.auth.getUser().token, this.story.id, data.comment).subscribe(data => {
+
+                      });
+                  }
+              }
+          ]
+      });
+      alert.present();
   }
 
     /**

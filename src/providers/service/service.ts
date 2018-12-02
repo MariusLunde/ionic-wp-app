@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as Config  from "../../config";
-
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
+import {AuthenticationService} from "../authentication-service/authentication-service";
+import {Observable} from "rxjs";
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class ServiceProvider {
 
     constructor(
         public http: HttpClient,
+        private auth: AuthenticationService
     ) {
 
   }
@@ -58,11 +60,22 @@ export class ServiceProvider {
         return this.category;
     }
 
-    createComment(token, input) {
+    createComment(token, id, input){
+        let comment_url = "&post=" + id;
         let header : Headers = new Headers();
-        header.append('Authorization', 'Bearer ' + token);
-
-        return this.http.post(Config.WORDPRESS_REST_API_URL + '/wp/v2/comments/(?P<id>[\\d]+)\t\n' + token, {header: header},{});
+        header.append('Authorization', 'Basic ' + token);
+        console.log(header);
+        console.log(this.auth.getUser().user.ID);
+        return this.http.post(Config.WORDPRESS_URL + '/wp-json/wp/v2/comments?'
+            + comment_url,
+            {
+                token: token,
+                content: input,
+                author_id: this.auth.getUser().user.ID,
+                author_name: this.auth.getUser().user.data.display_name,
+                author_email: this.auth.getUser().user.data.user_email,
+                // post: JSON.stringify(id),
+                }, {});
     }
 
 }

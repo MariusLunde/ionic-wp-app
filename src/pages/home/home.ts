@@ -63,9 +63,6 @@ export class HomePage {
 
         this.search();
 
-        this.service.getHeader().subscribe(resp => {
-            console.log(resp.headers.get('X-Token'));
-        });
   }
     /**
      * Retrieve recent posts through the WordPress API

@@ -22,8 +22,8 @@ export class MyApp {
               this.auth.getUser().then(data => {
                   this.auth.validateAuthToken(data.token)
                       .subscribe(
-                          res => this.rootPage = HomePage,
-                          err => this.rootPage = LoginPage
+                          res => this.rootPage = HomePage && console.log(res),
+                          err => this.rootPage = LoginPage && console.log(err)
                       )
               });
 

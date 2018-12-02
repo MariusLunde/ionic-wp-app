@@ -42,8 +42,14 @@ export class AuthenticationService {
 
     validateAuthToken(token){
         let header : Headers = new Headers();
+
+        header.append('Content-Type',  'application/json');
+
         header.append('Authorization','Basic ' + token);
-        return this.http.post(Config.WORDPRESS_URL + '/wp-json/jwt-auth/v1/token/validate?token=' + token,
-            {header: header}, {})
+
+        console.log(header);
+
+        return this.http.post(Config.WORDPRESS_URL + '/wp-json/jwt-auth/v1/token/validate',
+            { header: header }, { responseType: 'text' });
     }
 }
