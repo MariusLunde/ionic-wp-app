@@ -1,4 +1,5 @@
 page-post {
+  font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
   ion-title{
     font-size: inherit;
     text-align: center;
@@ -24,7 +25,19 @@ page-post {
   }
 
   .card-content {
-    max-height: 15vh;
+    text-align: -moz-center !important;
+    text-align: -webkit-center !important;
+    text-align: center;
+    //max-height: 15vh;
+    margin-bottom: 10vh;
+    #commentContent p{
+      text-align: -moz-center !important;
+      text-align: -webkit-center !important;
+      text-align: center !important;
+    }
+    #commentTitle{
+      font-family: "Segoe UI", "Noto Sans", sans-serif;
+    }
   }
 
   .time{
@@ -34,6 +47,7 @@ page-post {
   }
 
   .cat{
+    margin: 1vh;
     display: block;
     right: 3vh;
     bottom: 3vh;
@@ -43,11 +57,19 @@ page-post {
 
   ion-card-content {
     text-justify: inter-word;
+    //min-height: 5vh;
   }
+
+  #comments{
+    padding: 2vh;
+  }
+
 
 
   .hide{
     display: none;
   }
+
+
 
 }

@@ -1,31 +1,24 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title [innerHTML]="story.title.rendered"></ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
-  <ion-fab bottom right #fab >
-    <button ion-fab color="primary" *ngIf="!saved" class="fab1"><ion-icon name="menu"></ion-icon></button>
+  <ion-fab bottom left #fab >
+    <button ion-fab color="primary" *ngIf="!saved"><ion-icon name="menu"></ion-icon></button>
       <ion-fab-list side="top">
-        <button ion-fab color="primary" (click)="createComment()"><ion-icon name="create"></ion-icon></button>
-        <button ion-fab color="primary" *ngIf="button" (click)="save(story)"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="primary" (click)="createComment(fab)"><ion-icon name="create"></ion-icon></button>
+        <button ion-fab color="primary" *ngIf="button" (click)="save(story, fab)"><ion-icon name="star"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
   <p [innerHTML]='story.content.rendered'></p>
+  <ion-badge color="secondary" class="time" [innerHTML]="'Date: ' + story.date.split('T')[0]"></ion-badge>
+
   <ion-row class="cat" *ngFor="let cat of category; let i=index" col-sm-1="1">
-    <ion-badge *ngIf="i < 3" class="cat" [innerHTML]="cat.name"></ion-badge>
+    <ion-badge class="cat" [innerHTML]="cat.name" (click)="goToCat(cat.id)"></ion-badge>
   </ion-row>
-  <ion-badge color="dark" class="time" [innerHTML]="'Date: ' + story.date.split('T')[0]"></ion-badge>
-  <ion-title color="dark">Comments</ion-title>
-  <ion-card *ngFor="let comment of commetns" class="card-content">
+  <ion-title color="dark" id="comments">Comments</ion-title>
+  <ion-card *ngFor="let comment of comments" class="card-content">
     <ion-card-content>
 
-      <ion-title>{{comment.author_name}}</ion-title>
-      <ion-item [innerHTML]="comment.content.rendered"></ion-item>
-      <ion-badge color="dark" [innerHTML]="'date ' + comment.date.split('T')[0]"></ion-badge>
+      <ion-title id="commentTitle">{{comment.author_name}}</ion-title>
+      <ion-item id="commentContent" [innerHTML]="comment.content.rendered"></ion-item>
+      <p color="dark" [innerHTML]="'date ' + comment.date.split('T')[0]"></p>
 
     </ion-card-content>
   </ion-card>

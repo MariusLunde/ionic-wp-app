@@ -20,7 +20,8 @@ export class ServiceProvider {
         private auth: AuthenticationService
     ) {
 
-  }
+    }
+
 
   getHeader() {
       return this.http.get<any>(Config.WORDPRESS_URL, {observe: 'response'});
@@ -28,10 +29,9 @@ export class ServiceProvider {
   }
 
 
-
     getRecentPosts(categoryId:number, page:number = 1) {
         let category_url = categoryId? ("&categories=" + categoryId): "";
-        let postUrl = page ? 'posts?page=' + page : "";
+        let postUrl = page ? 'posts' + "?_embed=true?page=" + page : "";
 
         return this.http.get(
             Config.WORDPRESS_REST_API_URL + postUrl + category_url);
@@ -52,7 +52,8 @@ export class ServiceProvider {
     }
 
     getCategories() {
-        this.http.get(Config.WORDPRESS_REST_API_URL + "categories/").subscribe(data => {
+
+        this.http.get(Config.WORDPRESS_REST_API_URL + "categories").subscribe(data => {
             for(let key in data){
                 this.category[key] = data[key];
             }
@@ -63,7 +64,7 @@ export class ServiceProvider {
     createComment(token, id, input){
         let comment_url = "&post=" + id;
         let header : Headers = new Headers();
-        header.append('Authorization', 'Basic ' + token);
+        header.append('Authorization', 'Bearer ' + token);
         console.log(header);
         console.log(this.auth.getUser().user.ID);
         return this.http.post(Config.WORDPRESS_URL + '/wp-json/wp/v2/comments?'
@@ -71,10 +72,10 @@ export class ServiceProvider {
             {
                 token: token,
                 content: input,
+                // status: 'approved',
                 author_id: this.auth.getUser().user.ID,
                 author_name: this.auth.getUser().user.data.display_name,
                 author_email: this.auth.getUser().user.data.user_email,
-                // post: JSON.stringify(id),
                 }, {});
     }
 

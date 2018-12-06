@@ -28,11 +28,11 @@ export class CategoriesPage {
   }
 
     search(s){
-        // if (s == 'all') {
-        //     this.searchTerm = '0' ;
-        // }else{
-        //     this.searchTerm = s;
-        // }
+        if (s == 'all') {
+            this.searchTerm = 17;
+        }else{
+            this.searchTerm = s;
+        }
 
         this.searchTerm = s;
 

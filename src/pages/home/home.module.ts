@@ -11,3 +11,4 @@ import { HomePage} from "./home";
   ],
 })
 export class HomePageModule {}
+export default this.category;

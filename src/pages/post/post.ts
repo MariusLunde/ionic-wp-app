@@ -1,9 +1,10 @@
 import {Component, NgZone, ViewChild} from '@angular/core';
-import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Content, FabContainer, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
 import {ServiceProvider} from "../../providers/service/service";
 import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
 import { AlertController } from 'ionic-angular';
+import {HomePage} from "../home/home";
 
 
 
@@ -31,7 +32,7 @@ export class PostPage {
     /**
      *Array of comments fetched from WordPress API using Service.ts.
      */
-    commetns: Array<any> = new Array<any>();
+    comments: Array<any> = new Array<any>();
     /**
      *catgory is an Array of catgories relative to current post.
      */
@@ -40,6 +41,8 @@ export class PostPage {
     contentShown: any;
 
     input: string;
+
+    savedStory : Array<any> = new Array<any>();
 
 
     /**
@@ -64,15 +67,15 @@ export class PostPage {
         //     this.contentShown = data;
         // });
 
-        this.category = this.service.getCategories();
+        this.category = this.story._embedded['wp:term'][0];
+
 
         this.settings.get(this.story.name) ? this.saved = true : this.saved = false;
 
         this.service.getComments(this.story.id).subscribe(data => {
             for(let key in data){
 
-                this.commetns[key] = data[key];
-                console.log(this.commetns)
+                this.comments[key] = data[key];
             }
         });
 
@@ -100,16 +103,15 @@ export class PostPage {
     /**
      *Saves content to Settings.ts as the title of the story.
      */
-  save(content: any) {
-
-      if (content != this.settings.get('story')) {
+  save(content, fab: FabContainer) {
+            fab.close();
           this.settings.set(content.title.rendered, content);
           this.saved = true;
-
       }
-  }
 
-  createComment() {
+
+  createComment(fab: FabContainer) {
+      fab.close();
       let alert = this.alertCon.create({
           title: 'Create comment',
           inputs: [
@@ -143,7 +145,13 @@ export class PostPage {
      *returns to HomePage
      */
   goBack() {
-        this.navCtrl.push('HomePage');
+        this.navCtrl.push(HomePage);
+  }
+
+  goToCat(evt){
+      this.navCtrl.push(HomePage, {
+          searchTerm: evt
+      })
   }
 
 }

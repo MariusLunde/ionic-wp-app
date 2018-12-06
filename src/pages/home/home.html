@@ -1,31 +1,40 @@
 
-<ion-content padding>
 
+<ion-content padding>
   <ion-fab bottom left #fab>
-    <button ion-fab color="primary" class="fab1"><ion-icon name="menu"></ion-icon></button>
+    <button ion-fab color="primary"><ion-icon name="menu"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab color="primary" side="right" class="fabFav" (click)="toCategories(fab1)" ><ion-icon name="add"></ion-icon></button>
-      <button ion-fab color="primary" side="right" class="fabFav" (click)="toFavorites(fab1)" ><ion-icon name="star"></ion-icon></button>
-      <button ion-fab color="primary" side="right" class="fabFav" (click)="logOut(fab1)" ><ion-icon name="moon"></ion-icon></button>
+      <!--<button ion-fab color="primary" side="right" class="fabFav" (click)="toCategories(fab1)" ><ion-icon name="add"></ion-icon></button>-->
+      <button ion-fab color="primary" side="right" class="fabFav" (click)="toFavorites(fab)" ><ion-icon name="star"></ion-icon></button>
+      <button ion-fab color="primary" side="right" class="fabFav" (click)="logOut(fab)" ><ion-icon name="moon"></ion-icon></button>
 
     </ion-fab-list>
   </ion-fab>
+
+
     <div>
-      <ion-card style="padding: 0;" *ngFor="let evt of story">
-        <!--<div style="padding: 0;" class="card-content" *ngIf="evt._embedded['wp:featuredmedia']" (click)="postTapped(evt)">-->
-        <ion-card-content style="padding: 0;">
-          <!--<img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">-->
-          <ion-card-title style="padding: 2vh;" [innerHTML]="evt.title.rendered"></ion-card-title>
-          <p style="padding: 2vh;" [innerHTML]="evt.excerpt.rendered"></p>
-        </ion-card-content>
-        <ion-row no-padding>
-          <ion-col text-right>
+
+      <ion-slides *ngIf="slidesGo" autoplay="3000" loop="true" speed="500">
+        <ion-slide *ngFor="let evt of story">
+
+        <ion-card>
+          <ion-card-content>
+            <div id="img">
+            <img [src]="evt._embedded['wp:featuredmedia']['0'].source_url" height="100" width="100">
+            </div>
+            <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
+            <div id="excerpt" [innerHTML]="evt.excerpt.rendered"></div>
             <button ion-button outline no-border color="dark" icon-start (click)="postTapped(evt)">
-              Read More >>
+              Les >>
             </button>
-          </ion-col>
-        </ion-row>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
+
+        </ion-slide>
+      </ion-slides>
+
+
+
     </div>
   <ion-infinite-scroll *ngIf="morePagesAvailable" (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content

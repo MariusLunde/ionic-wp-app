@@ -43,7 +43,7 @@ export class AuthenticationService {
     validateAuthToken(token){
         let header : Headers = new Headers();
 
-        header.append('Content-Type',  'application/json');
+        // header.append('Content-Type',  'application/json');
 
         header.append('Authorization','Basic ' + token);
 

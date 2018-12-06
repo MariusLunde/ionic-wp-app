@@ -1,32 +1,18 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>Favorites</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
-  <div *ngIf="Favs == true">
+  <ion-fab bottom left #fab>
+    <button ion-fab color="primary" class="fab1" (click)="exit()"><ion-icon name="exit"></ion-icon></button>
+  </ion-fab>
     <ion-card *ngFor="let evt of story">
-      <!--<div *ngIf="evt._embedded['wp:featuredmedia']">-->
       <ion-card-content>
-        <ion-card-title [innerHTML]="evt.title.rendered"></ion-card-title>
+        <ion-card-title>{{evt}}</ion-card-title>
         <!--<img [src]="evt._embedded['wp:featuredmedia']['0'].source_url">-->
-      </ion-card-content>
-      <!--</div>-->
       <ion-row no-padding>
         <ion-col text-right>
           <button ion-button color="dark" (click)="postTapped(evt)" icon-start>
-            Read More
+            Les
           </button>
         </ion-col>
       </ion-row>
+      </ion-card-content>
     </ion-card>
-  </div>
-  <div *ngIf="Favs==false" style="text-align: center">
-    <ion-icon name="alert" style="text-align: center; font-size: 10vh"><p style="color: #8f8f8f; font-size: 3vh;">No favorites</p></ion-icon>
-  </div>
-
 </ion-content>

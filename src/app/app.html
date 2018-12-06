@@ -1,1 +1,18 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content">
+
+
+    <ion-content>
+        <ion-list>
+            <button menuClose ion-item *ngFor="let s of storyFromHome" (click)="searchCat(s.name, fab)">
+                {{s.name}}
+            </button>
+        </ion-list>
+    </ion-content>
+
+</ion-menu>
+
+<ion-nav id="nav" fab-close [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>
+
+<ion-fab bottom right #fab>
+    <button ion-fab color="primary" menuToggle><ion-icon name="search"></ion-icon></button>
+</ion-fab>

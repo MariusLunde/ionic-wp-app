@@ -1,16 +1,8 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title [innerHTML]="story.title.rendered"></ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
 
   <ion-fab bottom right>
     <div *ngIf="saved == false">
-      <button ion-fab color="dark" *ngIf="button" (click)="delete(story)"><ion-icon name="remove"></ion-icon></button>
+      <button ion-fab color="primary" *ngIf="button" (click)="delete(story)"><ion-icon name="remove"></ion-icon></button>
     </div>
   </ion-fab>
   <p [innerHTML]="story.content.rendered"></p>

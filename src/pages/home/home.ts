@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {Card, FabContainer, NavController, NavParams, Slides} from 'ionic-angular';
 import {ServiceProvider} from "../../providers/service/service";
 import {Settings} from "../../shared/providers/settings/settings";
 import {AuthenticationService} from "../../providers/authentication-service/authentication-service";
+import * as Config  from "../../config";
 
 
 @Component({
@@ -10,7 +11,8 @@ import {AuthenticationService} from "../../providers/authentication-service/auth
     templateUrl: 'home.html'
 })
 export class HomePage {
-
+    @ViewChild(Slides) slides: Slides;
+    @ViewChild(Card) cards: Card;
     /**
      * List of posts retrieved from wordpress
      */
@@ -27,6 +29,7 @@ export class HomePage {
     /**
      *
      */
+    public slidesGo: boolean;
     public ready: boolean = false;
     /**
      * Flag set if more pages are available for download
@@ -43,7 +46,10 @@ export class HomePage {
      */
     categoryId: any;
 
+    identity: string = Config.WORDPRESS_URL;
 
+
+    swipeLoaded: boolean;
     /**
      * Initialize page components and prepare required data
      *
@@ -60,21 +66,26 @@ export class HomePage {
         this.category = this.service.getCategories();
 
         this.categoryId == undefined ? this.searchTerm = this.navParam.get('searchTerm') : false;
+        this.categoryId == undefined ? this.categoryId = this.navParam.get('searchTerm') : false;
+
+
+        // this.settings.setAll(undefined);
 
         this.search();
-
-  }
+    }
     /**
      * Retrieve recent posts through the WordPress API
      *
      * return promise of stories, else returns errormsg.
      */
-  getPosts() {
+  getPosts(id: number = this.categoryId, page: number = 1) {
       return new Promise((resolve, reject) => {
-          this.service.getRecentPosts(this.categoryId).subscribe(data => {
+          this.service.getRecentPosts(id, page).subscribe(data => {
               if (data !== null) {
                   for(let key in data){
                       this.story[key] = data[key];
+                      this.slidesGo = true;
+
                   }
                   this.ready = true;
                   resolve(this.story);
@@ -86,6 +97,7 @@ export class HomePage {
 
       });
   }
+
 
     /**
      * Description here
@@ -135,7 +147,6 @@ export class HomePage {
         });
         this.story = new Array<any>();
         this.getPosts().then(stories =>{
-            console.log(stories);
         }).catch((errorMsg) =>{
             console.log(errorMsg);
         });
@@ -148,21 +159,8 @@ export class HomePage {
      * If scrolled to bottom of page return promise of new stories added, else return errormsg.
      */
     doInfinite(infiniteScroll) {
-            return new Promise(((resolve, reject) => {
                 let page = Math.ceil(this.story.length / 10) + 1;
-                this.service.getRecentPosts(this.categoryId, page).subscribe(data => {
-                    if(data !== undefined){
-                        for (let key in data) {
-                            this.story.push(data[key]);
-                            infiniteScroll.complete();
-                            resolve(this.story);
-                        }
-                    }else{
-
-                        reject('found no more posts');
-                    }
-                });
-            }));
+                this.getPosts(this.categoryId, page).catch(infiniteScroll.complete())
     }
 
 
@@ -171,8 +169,8 @@ export class HomePage {
      *
      * Pushes to FavoritesPage.
      */
-    toFavorites() {
-
+    toFavorites(fab: FabContainer) {
+        fab.close();
         this.navCtrl.push('FavoritesPage');
     }
 
@@ -185,12 +183,14 @@ export class HomePage {
         this.navCtrl.push('CategoriesPage', {
             cat: this.category
         });
+
     }
 
-    logOut() {
+    logOut(fab: FabContainer) {
         this.navCtrl.push('LoginPage');
-
+        fab.close();
         this.auth.logOut();
     }
+
 
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Settings} from "../../shared/providers/settings/settings";
+import {HomePage} from "../home/home";
 
 /**
  * Generated class for the FavoritesPage page.
@@ -20,43 +21,21 @@ export class FavoritesPage {
   public Favs: boolean = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public settings: Settings) {
+        for (let story in this.settings.getAll()){
+            story != 'User' ? this.story.push(story): '';
 
-          this.story = this.settings.getAll();
-
-          this.settings.ready.then( () => {
-              if(this.isEmpty(this.settings.getAll())) {
-                  this.Favs = false;
-
-              }else{
-                  this.Favs = true;
-
-                  this.story = Object.keys(this.story).map(key => this.story[key]);
-
-                  for (let key in this.story) {
-                      if (this.story[key] == null) {
-                          this.story[key] = this.story.pop();
-                      }
-                  }
-
-              }
-          });
-
-
+        }
   }
 
-    postTapped(story : any) {
+    postTapped(story: string) {
+        console.log(story);
         this.navCtrl.push('SavedPage', {
             story: story
         });
-
     }
 
-    isEmpty(obj) {
-        for(var key in obj) {
-            if(obj.hasOwnProperty(key))
-                return false;
-        }
-        return true;
+    exit(){
+        this.navCtrl.push(HomePage);
     }
 
 }
